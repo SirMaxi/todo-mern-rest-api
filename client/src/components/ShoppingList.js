@@ -7,6 +7,12 @@ import PropTypes from 'prop-types';
 
 class ShoppingList extends Component {
 
+    static propTypes = {
+        getItems: PropTypes.func.isRequired,
+        item: PropTypes.object.isRequired,
+        isAuthenticated: PropTypes.bool
+    };
+
     componentDidMount() {
         this.props.getItems();
     };
@@ -16,6 +22,7 @@ class ShoppingList extends Component {
     };
 
     render() { //EL ERROR SALE POR EL TRANSITION, SI AL HACER DEPLOY O ALGO ASI TIRA ERROR, BORRALO Y CAMBIALO POR UN DIV NORMAL Y YA FUE
+
         const { items } = this.props.item;
         return (
             <div className="container">
@@ -24,11 +31,16 @@ class ShoppingList extends Component {
                         {items.map(({ _id, name }) => (
                             <CSSTransition key={_id} timeout={500} classNames="fade">
                                 <ListGroupItem>
+                                    {this.props.isAuthenticated
+                                    ?
                                     <Button
                                         className="btn btn-danger sm remove-btn"
                                         onClick={this.onDeleteClick.bind(this, _id)}
                                     >&times;
                                     </Button>
+                                    :
+                                    null
+                                    }
                                     {name}
                                 </ListGroupItem>
                             </CSSTransition>
@@ -40,13 +52,9 @@ class ShoppingList extends Component {
     }
 }
 
-ShoppingList.propTypes = {
-    getItems: PropTypes.func.isRequired,
-    item: PropTypes.object.isRequired
-}
-
-const mapStateToProps = (state) => ({
-    item: state.item
+const mapStateToProps = state => ({
+    item: state.item,
+    isAuthenticated: state.auth.isAuthenticated
 });
 
 export default  connect(mapStateToProps, { getItems, deleteItem })(ShoppingList);
