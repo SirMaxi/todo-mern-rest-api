@@ -19,3 +19,9 @@
     opacity: 0.01;
     transition: opacity 1000ms ease-in;
 }
+
+body {
+    background: linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4);
+}
+
+
